@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pasar Sayur Layak</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f8f3;
+      color: #1f2937;
+    }
+
+    header {
+      background: #2f855a;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin-bottom: 8px;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: bold;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 40px 20px;
+      background: #e6ffed;
+    }
+
+    .hero h2 {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: 30px auto;
+    }
+
+    .section-title {
+      margin-bottom: 20px;
+      font-size: 28px;
+      color: #2f855a;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 15px;
+    }
+
+    .card h3 {
+      margin-bottom: 8px;
+      font-size: 20px;
+    }
+
+    .price {
+      color: #2f855a;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .card p {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    button {
+      margin-top: 12px;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #2f855a;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #276749;
+    }
+
+    .cart, .checkout, .seller-form {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      margin-top: 30px;
+    }
+
+    .cart ul {
+      list-style: none;
+      margin-top: 15px;
+    }
+
+    .cart li {
+      padding: 8px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .total {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #2f855a;
+    }
+
+    form input, form textarea, form select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #2f855a;
+      color: white;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Pasar Sayur Layak</h1>
+    <p>Jual beli sayur yang masih layak konsumsi</p>
+    <nav>
+      <a href="#produk">Produk</a>
+      <a href="#checkout">Checkout</a>
+      <a href="#mitra">Mitra Penjual</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Belanja Sayur Hemat dan Tetap Layak</h2>
+    <p>
+      Platform sederhana untuk menjual dan membeli sayur yang bentuknya kurang sempurna,
+      tetapi masih segar, bersih, dan layak dikonsumsi.
+    </p>
+  </section>
+
+  <div class="container">
+    <h2 class="section-title" id="produk">Daftar Produk</h2>
+    <div class="products" id="product-list"></div>
+
+    <div class="cart">
+      <h2>Keranjang Belanja</h2>
+      <ul id="cart-list"></ul>
+      <div class="total" id="total-price">Total: Rp0</div>
+    </div>
+
+    <div class="checkout" id="checkout">
+      <h2 class="section-title">Checkout</h2>
+      <form onsubmit="checkout(event)">
+        <input type="text" id="nama" placeholder="Nama pembeli" required />
+        <input type="text" id="alamat" placeholder="Alamat pengiriman" required />
+        <select id="metode" required>
+          <option value="">Pilih metode pembayaran</option>
+          <option>COD</option>
+          <option>Transfer Bank</option>
+          <option>E-Wallet</option>
+        </select>
+        <button type="submit">Buat Pesanan</button>
+      </form>
+    </div>
+
+    <div class="seller-form" id="mitra">
+      <h2 class="section-title">Daftar Mitra Penjual</h2>
+      <form onsubmit="daftarMitra(event)">
+        <input type="text" id="usaha" placeholder="Nama usaha / kebun" required />
+        <input type="text" id="wa" placeholder="Nomor WhatsApp" required />
+        <textarea id="jenis" rows="4" placeholder="Jenis sayur yang dijual" required></textarea>
+        <button type="submit">Daftar Mitra</button>
+      </form>
+    </div>
+
+    <div class="seller-form" id="admin">
+      <h2 class="section-title">Admin Sederhana - Tambah Produk</h2>
+      <form onsubmit="tambahProduk(event)">
+        <input type="text" id="produkNama" placeholder="Nama produk" required />
+        <input type="number" id="produkHarga" placeholder="Harga" required />
+        <input type="text" id="produkDeskripsi" placeholder="Deskripsi singkat" required />
+        <input type="text" id="produkGambar" placeholder="Link gambar produk" required />
+        <button type="submit">Tambah Produk</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Pasar Sayur Layak - Kurangi food waste, belanja lebih bijak</p>
+  </footer>
+
+  <script>
+    const defaultProducts = [
+      {
+        nama: 'Wortel Grade B',
+        harga: 8000,
+        deskripsi: 'Bentuk tidak seragam, tapi tetap segar dan cocok untuk sup atau tumisan.',
+        gambar: 'https://images.unsplash.com/photo-1447175008436-170170753d52?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        nama: 'Tomat Panen Sore',
+        harga: 9500,
+        deskripsi: 'Ada sedikit baret alami, tetap layak konsumsi dan enak untuk sambal.',
+        gambar: 'https://images.unsplash.com/photo-1546470427-e26264be0b0d?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        nama: 'Kentang Harian',
+        harga: 11000,
+        deskripsi: 'Ukuran campur, cocok untuk goreng, rebus, atau sup rumahan.',
+        gambar: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        nama: 'Bayam Ikat Hemat',
+        harga: 4000,
+        deskripsi: 'Panen pagi, segar, cocok untuk sayur bening dan tumis.',
+        gambar: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=800&q=80'
+      }
+    ];
+
+    let products = JSON.parse(localStorage.getItem('products')) || defaultProducts;
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function formatRupiah(angka) {
+      return 'Rp' + angka.toLocaleString('id-ID');
+    }
+
+    function saveProducts() {
+      localStorage.setItem('products', JSON.stringify(products));
+    }
+
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    function renderProducts() {
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = '';
+
+      products.forEach((product) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${product.gambar}" alt="${product.nama}" />
+          <div class="card-content">
+            <h3>${product.nama}</h3>
+            <p>${product.deskripsi}</p>
+            <div class="price">${formatRupiah(product.harga)}</div>
+            <button onclick="addToCart('${product.nama.replace(/'/g, "\'")}', ${product.harga})">Beli</button>
+          </div>
+        `;
+        productList.appendChild(card);
+      });
+    }
+
+    function addToCart(nama, harga) {
+      cart.push({ nama, harga });
+      saveCart();
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartList = document.getElementById('cart-list');
+      const totalPrice = document.getElementById('total-price');
+      cartList.innerHTML = '';
+
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        total += item.harga;
+        const li = document.createElement('li');
+        li.innerHTML = `${item.nama} - ${formatRupiah(item.harga)} <button onclick="removeFromCart(${index})" style="width:auto;padding:5px 10px;margin-left:10px;">Hapus</button>`;
+        cartList.appendChild(li);
+      });
+
+      totalPrice.textContent = 'Total: ' + formatRupiah(total);
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      saveCart();
+      renderCart();
+    }
+
+    function checkout(event) {
+  event.preventDefault();
+
+  if (cart.length === 0) {
+    alert('Keranjang masih kosong.');
+    return;
+  }
+
+  const nama = document.getElementById('nama').value;
+  const alamat = document.getElementById('alamat').value;
+  const metode = document.getElementById('metode').value;
+
+  let pesan = 'Halo Admin, saya ingin memesan sayur:%0A%0A';
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    pesan += (index + 1) + '. ' + item.nama + ' - ' + formatRupiah(item.harga) + '%0A';
+    total += item.harga;
+  });
+
+  pesan += '%0A--------------------------------';
+  pesan += '%0ANama: ' + nama;
+  pesan += '%0AAlamat: ' + alamat;
+  pesan += '%0AMetode Pembayaran: ' + metode;
+  pesan += '%0ATotal: ' + formatRupiah(total);
+
+  const nomorWhatsApp = '6282141667840';
+  const url = 'https://wa.me/' + nomorWhatsApp + '?text=' + pesan;
+
+  window.open(url, '_blank');
+
+  cart = [];
+  saveCart();
+  renderCart();
+  event.target.reset();
+}
+
+    function daftarMitra(event) {
+      event.preventDefault();
+      const usaha = document.getElementById('usaha').value;
+      alert('Pendaftaran mitra untuk ' + usaha + ' berhasil dikirim.');
+      event.target.reset();
+    }
+
+    function tambahProduk(event) {
+      event.preventDefault();
+
+      const nama = document.getElementById('produkNama').value;
+      const harga = Number(document.getElementById('produkHarga').value);
+      const deskripsi = document.getElementById('produkDeskripsi').value;
+      const gambar = document.getElementById('produkGambar').value;
+
+      products.push({ nama, harga, deskripsi, gambar });
+      saveProducts();
+      renderProducts();
+      event.target.reset();
+      alert('Produk baru berhasil ditambahkan.');
+    }
+
+    renderProducts();
+    renderCart();
+  </script>
+</body>
+</html>
